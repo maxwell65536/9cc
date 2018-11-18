@@ -6,10 +6,28 @@ int main(int argc,char **argv){
 		fprintf(stderr,"引数が正しくありませんyo\n");
 		return 1;
 	}
+	char *p = argv[1];
+
 	printf(".intel_syntax noprefix\n");
 	printf(".global main\n");
 	printf("main:\n");
-	printf("	mov rax, %ld\n", strtol((argv[1]),NULL,10));
+	printf("	mov rax, %ld\n", strtol(p,&p,10));
+
+	while(*p){
+		if(*p=='+'){
+			p++;
+			printf("	add rax,%ld\n",strtol(p,&p,10));
+			continue;
+		}
+		if(*p=='-'){
+			p++;
+			printf("	sub rax,%ld\n",strtol(p,&p,10));
+			continue;
+		}
+		fprintf(stderr,"予期せぬ文字です: '%c'\n",*p);
+		return 1;
+	}
+
 	printf("	ret\n");
 	return 0;
 }
